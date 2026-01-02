@@ -1,6 +1,7 @@
 
 let panel = null;
 let panelVisible = false;
+let refreshPanel = () => {};
 
 function createPanel(buttons) {
 	const panel = document.createElement('div');
@@ -30,13 +31,45 @@ function createPanel(buttons) {
 		fontWeight: 'bold',
 	};
 
+	// Get current playback rate
+	let currentRate = 1;
+	const video = document.querySelector('video');
+	if (video && typeof video.playbackRate === 'number') {
+		currentRate = video.playbackRate;
+	}
+
+	const btns = [];
 	buttons.forEach(({ label, onClick }) => {
 		const btn = document.createElement('button');
 		btn.textContent = label;
-		btn.onclick = onClick;
+		btn.onclick = function() {
+			onClick();
+			refreshPanel();
+		};
 		Object.assign(btn.style, buttonStyle);
+
+		// Highlight if matches current rate
+		const rate = parseFloat(label);
+		if (!isNaN(rate) && rate === currentRate) {
+			btn.style.background = 'yellow';
+		}
 		panel.appendChild(btn);
+		btns.push(btn);
 	});
+
+	// Helper to update button styles after click or keybind
+	refreshPanel = function() {
+		const video = document.querySelector('video');
+		const rate = video ? video.playbackRate : 1;
+		btns.forEach((btn) => {
+			const btnRate = parseFloat(btn.textContent);
+			if (!isNaN(btnRate) && btnRate === rate) {
+				btn.style.background = 'yellow';
+			} else {
+				btn.style.background = buttonStyle.background;
+			}
+		});
+	};
 
 	document.body.appendChild(panel);
 	return panel;
@@ -64,33 +97,41 @@ function setPlaybackRate(rate) {
 	const video = document.querySelector('video');
 	if (video) {
 		video.playbackRate = rate;
+		if (panelVisible && typeof refreshPanel === 'function') {
+			refreshPanel();
+		}
 	}
 }
 
 // Listen for Shift+5 keydown
 window.addEventListener('keydown', (e) => {
 	if (e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+		let handled = false;
 		switch (e.key) {
 			case '!': // Shift+1
 				setPlaybackRate(1);
-				console.log('[DevTools Extension] Shift+1 pressed: 1x speed');
+				handled = true;
 				break;
 			case '@': // Shift+2
 				setPlaybackRate(2);
-				console.log('[DevTools Extension] Shift+2 pressed: 2x speed');
+				handled = true;
 				break;
 			case '#': // Shift+3
 				setPlaybackRate(3);
-				console.log('[DevTools Extension] Shift+3 pressed: 3x speed');
+				handled = true;
 				break;
 			case '$': // Shift+4
 				setPlaybackRate(4);
-				console.log('[DevTools Extension] Shift+4 pressed: 4x speed');
+				handled = true;
 				break;
 			case '%': // Shift+5
 				e.preventDefault();
 				togglePanel();
+				handled = true;
 				break;
+		}
+		if (handled && panelVisible && typeof refreshPanel === 'function') {
+			refreshPanel();
 		}
 	}
 });
