@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Copilot Dev Tools",
+  "name": "Video speed modifier",
   "version": "0.1.0",
-  "description": "a collection of dev tools",
+  "description": "Allows for 3x and 4x video speeds conveniently.",
   "permissions": ["scripting", "activeTab"],
   "host_permissions": ["<all_urls>"],
   "action": {
