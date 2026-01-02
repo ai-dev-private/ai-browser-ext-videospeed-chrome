@@ -5,6 +5,10 @@ This project provides a unified browser extension for Chrome and Firefox to help
 
 ## Features
 - Video Speed Panel: Easily control playback speed for any video element on supported pages (not just YouTube)
+
+This is to avoid having to type 
+`document.getElementsByTagName("video")[0].playbackRate=4`
+
 - Popup UI: Speed buttons (1x–4x) are grouped in a row, with the Show/Hide Panel button always on a separate row below
 - Button highlighting: The active speed button is highlighted yellow, and updates automatically when you use the panel or keyboard shortcuts
 - Keyboard shortcuts for quick speed changes
