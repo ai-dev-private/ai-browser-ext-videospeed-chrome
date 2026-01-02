@@ -24,15 +24,11 @@ This is to avoid having to type
 - Chrome-only support: This extension is designed and tested exclusively for Google Chrome.
 - Shared logic for easy maintenance and feature parity
 
----
 
 ## Folder Structure
 - All extension files are in the project root (e.g. `manifest.json`, `content.js`, `popup.js`, etc.)
 
----
-
 ## Getting Started
-
 
 ### Chrome Extension (Developer Mode)
 1. Open Chrome and go to `chrome://extensions/`
@@ -43,15 +39,13 @@ This is to avoid having to type
 
 **Note:** This extension does not support Firefox. All development and testing is focused on Chrome only.
 
----
-
 ## Customization
 - Add more tools or logic in the root directory and update the content scripts as needed for each browser.
 
 ## Keyboard Shortcuts
 - **Ctrl+Shift+5**: Show/Hide the Video Speed Panel on any supported page.
 - **Shift+1** to **Shift+4**: Set video playback speed to 1x, 2x, 3x, or 4x. The panel display updates automatically to reflect the current speed.
+- Add more tools or logic in the root directory and update the content scripts as needed for each browser.
 
----
 
 
