@@ -14,14 +14,27 @@ function createPanel(buttons) {
 	panel.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
 	panel.style.borderRadius = '8px';
 	panel.style.display = 'flex';
-	panel.style.flexDirection = 'column';
-	panel.style.gap = '8px';
+	panel.style.flexDirection = 'row';
+	panel.style.gap = '16px';
+
+	panel.style.alignItems = 'center';
+
+	// Style for bigger buttons
+	const buttonStyle = {
+		padding: '12px 24px',
+		fontSize: '1.1em',
+		borderRadius: '6px',
+		border: '1px solid #888',
+		background: '#f5f5f5',
+		cursor: 'pointer',
+		fontWeight: 'bold',
+	};
 
 	buttons.forEach(({ label, onClick }) => {
 		const btn = document.createElement('button');
 		btn.textContent = label;
 		btn.onclick = onClick;
-		btn.style.margin = '2px 0';
+		Object.assign(btn.style, buttonStyle);
 		panel.appendChild(btn);
 	});
 
