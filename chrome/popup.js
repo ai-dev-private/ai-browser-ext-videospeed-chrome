@@ -12,3 +12,10 @@ document.getElementById('btn1x').onclick = function() { setSpeed(1); };
 document.getElementById('btn2x').onclick = function() { setSpeed(2); };
 document.getElementById('btn3x').onclick = function() { setSpeed(3); };
 document.getElementById('btn4x').onclick = function() { setSpeed(4); };
+
+// Show/Hide Panel button
+document.getElementById('btnTogglePanel').onclick = function() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: 'togglePanel'});
+    });
+};

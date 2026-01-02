@@ -1,3 +1,4 @@
+let ytPanel = null;
 // Shared logic for DOM manipulation and UI
 function setPlaybackRate(rate) {
     let video = document.querySelector('video');
@@ -13,6 +14,7 @@ function setPlaybackRate(rate) {
 }
 
 function createPanel(buttons) {
+    if (ytPanel) return ytPanel; // Only one panel
     const panel = document.createElement('div');
     panel.style.position = 'fixed';
     panel.style.top = '20px';
@@ -23,7 +25,7 @@ function createPanel(buttons) {
     panel.style.padding = '18px';
     panel.style.boxShadow = '0 4px 16px rgba(0,0,0,0.25)';
     panel.style.borderRadius = '12px';
-    panel.style.display = 'flex';
+    panel.style.display = 'none'; // Hidden by default
     panel.style.flexDirection = 'column';
     panel.style.gap = '14px';
 
@@ -51,6 +53,7 @@ function createPanel(buttons) {
     });
 
     document.body.appendChild(panel);
+    ytPanel = panel;
     return panel;
 }
 
@@ -103,5 +106,16 @@ browser.runtime.onMessage.addListener((message) => {
     if (message.action === 'setSpeed') {
         console.log('[DevTools Extension] Setting playback rate from popup:', message.rate);
         setPlaybackRate(message.rate);
+    }
+    if (message.action === 'togglePanel') {
+        if (ytPanel && ytPanel.style.display !== 'none') {
+            ytPanel.style.display = 'none';
+        } else {
+            if (!ytPanel) {
+                setupPanelAndKeybinds();
+            } else {
+                ytPanel.style.display = 'flex';
+            }
+        }
     }
 });

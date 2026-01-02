@@ -15,8 +15,9 @@ function setPlaybackRate(rate) {
     }
 }
 
+let ytPanel = null;
 function createPanel(buttons) {
-    // Create a floating panel
+    if (ytPanel) return ytPanel; // Only one panel
     const panel = document.createElement('div');
     panel.style.position = 'fixed';
     panel.style.top = '20px';
@@ -30,6 +31,7 @@ function createPanel(buttons) {
     panel.style.display = 'flex';
     panel.style.flexDirection = 'column';
     panel.style.gap = '14px';
+    panel.style.display = 'none'; // Hidden by default
 
     // Add header in one row
     const header = document.createElement('div');
@@ -56,6 +58,7 @@ function createPanel(buttons) {
     });
 
     document.body.appendChild(panel);
+    ytPanel = panel;
     return panel;
 }
 
@@ -114,5 +117,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'setSpeed') {
         console.log('[DevTools Extension] Setting playback rate from popup:', message.rate);
         setPlaybackRate(message.rate);
+    }
+    if (message.action === 'togglePanel') {
+        if (ytPanel && ytPanel.style.display !== 'none') {
+            ytPanel.style.display = 'none';
+        } else {
+            if (!ytPanel) {
+                setupPanelAndKeybinds();
+            } else {
+                ytPanel.style.display = 'flex';
+            }
+        }
     }
 });

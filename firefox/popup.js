@@ -10,3 +10,10 @@ function setSpeed(rate) {
 document.getElementById('btn2x').onclick = () => setSpeed(2);
 document.getElementById('btn3x').onclick = () => setSpeed(3);
 document.getElementById('btn4x').onclick = () => setSpeed(4);
+
+// Show/Hide Panel button
+document.getElementById('btnTogglePanel').onclick = () => {
+    browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
+        browser.tabs.sendMessage(tabs[0].id, {action: 'togglePanel'});
+    });
+};
