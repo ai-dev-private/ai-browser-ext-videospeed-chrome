@@ -9,11 +9,11 @@ function createPanel(buttons) {
 	panel.style.top = '20px';
 	panel.style.right = '20px';
 	panel.style.background = '#fff';
-	panel.style.border = '1px solid #d1d5db';
-	panel.style.zIndex = 99999;
-	panel.style.padding = '18px 18px 12px 18px';
-	panel.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12), 0 1.5px 0 #fff inset';
+	panel.style.border = '2px solid #000';
 	panel.style.borderRadius = '16px';
+	panel.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12), 0 1.5px 0 #fff inset';
+	panel.style.zIndex = 99999;
+	panel.style.padding = '24px 32px 24px 32px';
 	panel.style.display = 'flex';
 	panel.style.flexDirection = 'column';
 	panel.style.alignItems = 'center';
@@ -21,9 +21,11 @@ function createPanel(buttons) {
 	// Button row container
 	const buttonRow = document.createElement('div');
 	buttonRow.style.display = 'flex';
+	buttonRow.style.width = '100%';
 	buttonRow.style.justifyContent = 'center';
-	buttonRow.style.gap = '12px';
-	buttonRow.style.marginBottom = '10px';
+	buttonRow.style.alignItems = 'center';
+	buttonRow.style.gap = '24px';
+	buttonRow.style.marginBottom = '0';
 
 	// Apple-like button style
 	const buttonClass = 'fancy-btn';
