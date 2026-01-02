@@ -1,7 +1,16 @@
 # Copilot Dev Browser Extension Project
 This was created with copilot and LLMs
 
+
 This project provides a browser extension for **Google Chrome only** to help users address common annoyances on websites. All code now lives in the project root for easier maintenance.
+
+## Extension Screenshots
+
+**Extension Popup:**  
+![Extension Popup](extension-popup.jpg)
+
+**Extension Panel:**  
+![Extension Panel](extension-panel.jpg)
 
 ## Features
 - Video Speed Panel: Easily control playback speed for any video element on supported pages (not just YouTube)
