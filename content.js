@@ -8,28 +8,50 @@ function createPanel(buttons) {
 	panel.style.position = 'fixed';
 	panel.style.top = '20px';
 	panel.style.right = '20px';
-	panel.style.background = 'white';
-	panel.style.border = '1px solid #ccc';
+	panel.style.background = '#fff';
+	panel.style.border = '1px solid #d1d5db';
 	panel.style.zIndex = 99999;
-	panel.style.padding = '10px';
-	panel.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-	panel.style.borderRadius = '8px';
+	panel.style.padding = '18px 18px 12px 18px';
+	panel.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12), 0 1.5px 0 #fff inset';
+	panel.style.borderRadius = '16px';
 	panel.style.display = 'flex';
-	panel.style.flexDirection = 'row';
-	panel.style.gap = '16px';
-
+	panel.style.flexDirection = 'column';
 	panel.style.alignItems = 'center';
 
-	// Style for bigger buttons
-	const buttonStyle = {
-		padding: '12px 24px',
-		fontSize: '1.1em',
-		borderRadius: '6px',
-		border: '1px solid #888',
-		background: '#f5f5f5',
-		cursor: 'pointer',
-		fontWeight: 'bold',
-	};
+	// Button row container
+	const buttonRow = document.createElement('div');
+	buttonRow.style.display = 'flex';
+	buttonRow.style.justifyContent = 'center';
+	buttonRow.style.gap = '12px';
+	buttonRow.style.marginBottom = '10px';
+
+	// Apple-like button style
+	const buttonClass = 'fancy-btn';
+	const style = document.createElement('style');
+	style.textContent = `
+	  .fancy-btn {
+		padding: 12px 24px;
+		font-size: 1.1em;
+		border-radius: 12px;
+		border: 1px solid #d1d5db;
+		background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+		box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1.5px 0 #fff inset;
+		color: #222;
+		font-weight: 500;
+		transition: background 0.2s, box-shadow 0.2s;
+		cursor: pointer;
+	  }
+	  .fancy-btn:active {
+		background: linear-gradient(180deg, #e2e8f0 0%, #f8fafc 100%);
+		box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+	  }
+	  .fancy-btn.selected {
+		background: linear-gradient(180deg, #ffe066 0%, #ffd700 100%);
+		color: #222;
+		box-shadow: 0 2px 12px rgba(255, 215, 0, 0.15);
+	  }
+	`;
+	document.head.appendChild(style);
 
 	// Get current playback rate
 	let currentRate = 1;
@@ -42,18 +64,17 @@ function createPanel(buttons) {
 	buttons.forEach(({ label, onClick }) => {
 		const btn = document.createElement('button');
 		btn.textContent = label;
+		btn.className = buttonClass;
 		btn.onclick = function() {
 			onClick();
 			refreshPanel();
 		};
-		Object.assign(btn.style, buttonStyle);
-
 		// Highlight if matches current rate
 		const rate = parseFloat(label);
 		if (!isNaN(rate) && rate === currentRate) {
-			btn.style.background = 'yellow';
+			btn.classList.add('selected');
 		}
-		panel.appendChild(btn);
+		buttonRow.appendChild(btn);
 		btns.push(btn);
 	});
 
@@ -63,14 +84,15 @@ function createPanel(buttons) {
 		const rate = video ? video.playbackRate : 1;
 		btns.forEach((btn) => {
 			const btnRate = parseFloat(btn.textContent);
-			if (!isNaN(btnRate) && btnRate === rate) {
-				btn.style.background = 'yellow';
+			if (!isNaN(btnRate) && btnRate === Math.round(rate)) {
+				btn.classList.add('selected');
 			} else {
-				btn.style.background = buttonStyle.background;
+				btn.classList.remove('selected');
 			}
 		});
 	};
 
+	panel.appendChild(buttonRow);
 	document.body.appendChild(panel);
 	return panel;
 }
@@ -142,5 +164,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 		togglePanel();
 	} else if (msg.action === 'setSpeed' && typeof msg.rate === 'number') {
 		setPlaybackRate(msg.rate);
+	} else if (msg.action === 'getSpeed') {
+		const video = document.querySelector('video');
+		sendResponse({ rate: video && typeof video.playbackRate === 'number' ? video.playbackRate : 1 });
 	}
 });
